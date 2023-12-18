@@ -1,0 +1,7 @@
+
+ipython:S116"RRename this field "CPU_needed" to match the regular expression ^[_a-z][_a-z0-9]*$.(Žÿ«õ
+mpython:S117"VRename this parameter "CPU_needed" to match the regular expression ^[_a-z][a-z0-9_]*$.(äöàÉ
+jpython:S117"NRename this parameter "BS" to match the regular expression ^[_a-z][a-z0-9_]*$.(·å›ûÿÿÿÿÿ
+wpython:S117$"[Rename this local variable "CPU_needed" to match the regular expression ^[_a-z][a-z0-9_]*$.( ëàçÿÿÿÿÿ
+xpython:S117"\Rename this local variable "IoT_devices" to match the regular expression ^[_a-z][a-z0-9_]*$.(«”ãäýÿÿÿÿ
+}python:S117"aRename this local variable "total_CPU_needed" to match the regular expression ^[_a-z][a-z0-9_]*$.(åç–åüÿÿÿÿ

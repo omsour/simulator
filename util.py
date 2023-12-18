@@ -34,6 +34,9 @@ def thermal_noise(bandwidth, BOLTZMANN, TEMPERATURE):
 def calculate_noise(bandwidth, noise_figure):
     return thermal_noise(bandwidth,Params.BOLTZMANN,Params.TEMPERATURE) + noise_figure
 
+def calculate_computationTime(needed_operations, operations_cycles):
+    return needed_operations/operations_cycles
+
 def free_space_pathloss(distance, frequency):
      return 20*math.log10(distance)+10*math.log10(frequency) - 147.55 # in dB
 
@@ -66,7 +69,13 @@ def average(data):
     if len(data) > 0:
         return (sum(data) / len(data))
     else:
-        return None
+        return 0
+
+def maxCostCalculator(IoT_devices, weights):
+    maxCost = 0
+    for IoT in IoT_devices:
+        maxCost += weights[0] * IoT.data_generated + weights[1] * IoT.delay_budget
+    return maxCost
 
 def find_geo(coord_1, coord_2):
     dy = coord_2[1] - coord_1[1]

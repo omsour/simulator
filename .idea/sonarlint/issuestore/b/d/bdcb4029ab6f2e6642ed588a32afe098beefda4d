@@ -1,0 +1,16 @@
+
+Tpython:S1066‡"/Merge this if statement with the enclosing one.(•Ôø¥ıÿÿÿÿ8¯‹ÉùÆ1
+Opython:S1066ˆ"/Merge this if statement with the enclosing one.(Ğ±âÇ8°‹ÉùÆ1
+wpython:S117"TRename this local variable "IoT" to match the regular expression ^[_a-z][a-z0-9_]*$.(¶Ã¦¹ùÿÿÿÿ8°‹ÉùÆ1
+rpython:S117"TRename this parameter "IoTnodes" to match the regular expression ^[_a-z][a-z0-9_]*$.(»êº³8°‹ÉùÆ1
+python:S117"aRename this parameter "cloudComputeResources" to match the regular expression ^[_a-z][a-z0-9_]*$.(»êº³8°‹ÉùÆ1
+~python:S117"`Rename this parameter "edgeComputeResources" to match the regular expression ^[_a-z][a-z0-9_]*$.(»êº³8°‹ÉùÆ1
+‰python:S117"kRename this local variable "old_IoT_onCloud_CPU_cycles" to match the regular expression ^[_a-z][a-z0-9_]*$.(­‡ÕŸ8°‹ÉùÆ1
+…python:S117"gRename this local variable "remainingCloudCapacity" to match the regular expression ^[_a-z][a-z0-9_]*$.(€Şéû8°‹ÉùÆ1
+‰python:S117"fRename this local variable "remainingEdgeCapacity" to match the regular expression ^[_a-z][a-z0-9_]*$.(©äßûÿÿÿÿ8°‹ÉùÆ1
+„python:S117"aRename this local variable "somethingInCloud" to match the regular expression ^[_a-z][a-z0-9_]*$.(‡†˜Íşÿÿÿÿ8°‹ÉùÆ1
+spython:S100"URename method "allocateResources" to match the regular expression ^[a-z_][a-z0-9_]*$.(»êº³8°‹ÉùÆ1
+Upython:S14814"6Remove the unused local variable "total_budget_cloud".(ÿÖı˜8ğ©ÌùÆ1
+spython:S3776"TRefactor this function to reduce its Cognitive Complexity from 51 to the 15 allowed.(»êº³8°‹ÉùÆ1
+}python:S117x"`Rename this parameter "cloudComputeCapacity" to match the regular expression ^[_a-z][a-z0-9_]*$.(ê‹˜;8²‹ÉùÆ1
+|python:S117x"_Rename this parameter "edgeComputeCapacity" to match the regular expression ^[_a-z][a-z0-9_]*$.(ê‹˜;8²‹ÉùÆ1
