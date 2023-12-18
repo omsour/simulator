@@ -7,14 +7,16 @@ bandwidth = Params.BS_bandwidth
 power = Params.BS_power
 [x, y] = Params.BS_location
 frequency = Params.frequency
-
-
-# Generate the BS
-BS = BaseStation.BaseStation(1, bandwidth, power, x, y, frequency)
+weights = [1,1] # weights used to calculate cost function
 
 # Generate IoT devices, read from input_files folder the IoT device properties
 n_IoT_devices = Params.n_IoT_devices
 IoT_devices = IoT.read_from_IoT_file(Params.input_folder + "/IoT_" + str(n_IoT_devices)+ "_devices.txt")
+
+maxCost = util.maxCostCalculator(IoT_devices, weights)
+
+# Generate the BS
+BS = BaseStation.BaseStation(1, bandwidth, power, x, y, frequency, maxCost, weights)
 
 # Generate Edge and Cloud compute nodes according to the parameters in the Params.py file
 edgeComputeNode = ComputeNode.ComputeNode("Edge", Params.Edge_CPU_cycles, 0)

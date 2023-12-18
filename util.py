@@ -71,6 +71,12 @@ def average(data):
     else:
         return 0
 
+def maxCostCalculator(IoT_devices, weights):
+    maxCost = 0
+    for IoT in IoT_devices:
+        maxCost += weights[0] * IoT.data_generated + weights[1] * IoT.delay_budget
+    return maxCost
+
 def find_geo(coord_1, coord_2):
     dy = coord_2[1] - coord_1[1]
     dx = coord_2[0] - coord_1[0]

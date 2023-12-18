@@ -5,15 +5,15 @@ from objects import Params
 
 
 class BaseStation:
-    def __init__(self, id, bandwidth, power, x, y, frequency):
+    def __init__(self, id, bandwidth, power, x, y, frequency, maxCost, weights):
         self.id = id
         self.y = float(y)
         self.x = float(x)
         self.power = power
         self.bandwidth = bandwidth
         self.frequency = frequency
-        self.weights = [1, 1]
-        self.ratioConstant = 1
+        self.weights = weights
+        self.ratioConstant = maxCost/bandwidth
         self.fulfilmentrate = []
         self.overhead = []
         print("BS is generated")
