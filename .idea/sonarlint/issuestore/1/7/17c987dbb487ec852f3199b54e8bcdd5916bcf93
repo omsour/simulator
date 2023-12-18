@@ -1,0 +1,15 @@
+
+6python:S125"Remove this commented out code.(‘àÿ¼
+qpython:S117"URename this parameter "BOLTZMANN" to match the regular expression ^[_a-z][a-z0-9_]*$.(¯ùŽÁøÿÿÿÿ
+spython:S117"WRename this parameter "TEMPERATURE" to match the regular expression ^[_a-z][a-z0-9_]*$.(¯ùŽÁøÿÿÿÿ
+Npython:S1172o"1Remove the unused function parameter "legendpos".(²–¤«øÿÿÿÿ
+Ipython:S1172o",Remove the unused function parameter "lloc".(²–¤«øÿÿÿÿ
+Npython:S1172o"1Remove the unused function parameter "fontscale".(²–¤«øÿÿÿÿ
+Jpython:S1172o"-Remove the unused function parameter "error".(²–¤«øÿÿÿÿ
+Jpython:S1172o"-Remove the unused function parameter "scale".(²–¤«øÿÿÿÿ
+cpython:S117n"MRename this parameter "A" to match the regular expression ^[_a-z][a-z0-9_]*$.(çÇ—'
+rpython:S117p"[Rename this parameter "BAR_EDGE_COLORS" to match the regular expression ^[_a-z][a-z0-9_]*$.(¢ŒÌ‡
+jpython:S117p"SRename this parameter "OPACITY" to match the regular expression ^[_a-z][a-z0-9_]*$.(¢ŒÌ‡
+ppython:S117q"TRename this parameter "PATTERNS" to match the regular expression ^[_a-z][a-z0-9_]*$.(ù²í«ÿÿÿÿÿ
+fpython:S107n"PFunction "plot_bars" has 21 parameters, which is greater than the 13 authorized.(çÇ—'
+Dpython:S1481s"'Remove the unused local variable "fig".(å­£¿ûÿÿÿÿ

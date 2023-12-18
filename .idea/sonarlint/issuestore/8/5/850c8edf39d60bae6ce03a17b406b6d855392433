@@ -1,0 +1,6 @@
+
+hpython:S116"RRename this field "CPU_cycles" to match the regular expression ^[_a-z][_a-z0-9]*$.(­Ïø&
+lpython:S116"URename this field "delay_from_BS" to match the regular expression ^[_a-z][_a-z0-9]*$.(¿€ÌÑ
+mpython:S117"VRename this parameter "CPU_cycles" to match the regular expression ^[_a-z][a-z0-9_]*$.(€¿©ˆ
+qpython:S117"ZRename this parameter "computeTypeStr" to match the regular expression ^[_a-z][a-z0-9_]*$.(€¿©ˆ
+ppython:S117"YRename this parameter "delay_from_BS" to match the regular expression ^[_a-z][a-z0-9_]*$.(€¿©ˆ
