@@ -1,7 +1,4 @@
 import random
-import util
-from objects import Params
-
 
 class BaseStation:
     def __init__(self, id, bandwidth, power, x, y, frequency):
@@ -11,6 +8,8 @@ class BaseStation:
         self.power = power
         self.bandwidth = bandwidth
         self.frequency = frequency
+        self.weights = [1, 1]
+        self.ratioConstant = 1
         self.fulfilmentrate = []
         self.overhead = []
         print("BS is generated")
@@ -80,6 +79,11 @@ class BaseStation:
 
                 total_budget_cloud = Params.Cloud_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
                                                                                             Params.Cloud_CPU_cycles)
+                # Distribution of bandwidth
+                cost = self.weights[0] * IoT.data_generated + self.weights[1] * IoT.delay_budget
+                uplink_bandwidth = self.ratioConstant * cost / self.bandwidth
+                #uplink_bandwidth = self.bandwidth / n_nodes
+
 
                 if (total_budget_cloud <= IoT.delay_budget):
                     run_on_edge = 0

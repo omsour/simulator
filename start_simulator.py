@@ -29,6 +29,7 @@ stats = np.zeros((4, len(schemes))) # 4 for 4 statistics
 for a, allocation_scheme in enumerate(schemes):
     allocation = BS.allocateResources(edgeComputeNode, cloudComputeNode, IoT_devices, allocation_scheme)
 
+
     # Check if the algorithm's decision is a feasible one (resource limits are not violated)
     # Report the resource utilization: uplink bandwidth, edge and cloud usage
     is_feasible, utilization_uplink, utilization_edge, utilization_cloud = BS.check_if_feasible(allocation, edgeComputeNode.CPU_cycles, cloudComputeNode.CPU_cycles)
