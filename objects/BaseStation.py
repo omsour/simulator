@@ -13,7 +13,7 @@ class BaseStation:
         self.bandwidth = bandwidth
         self.frequency = frequency
         self.weights = weights
-        self.ratioConstant = maxCost/bandwidth
+        self.ratioConstant = bandwidth/maxCost
         self.fulfilmentrate = []
         self.overhead = []
         print("BS is generated")
@@ -85,8 +85,8 @@ class BaseStation:
                                                                                             Params.Cloud_CPU_cycles)
                 # Distribution of bandwidth
                 cost = self.weights[0] * IoT.data_generated + self.weights[1] * IoT.delay_budget
-                uplink_bandwidth = self.ratioConstant * cost / self.bandwidth
-                #uplink_bandwidth = self.bandwidth / n_nodes
+                uplink_bandwidth = self.ratioConstant * cost
+                uplink_bandwidth2 = self.bandwidth / n_nodes
 
 
                 if (total_budget_cloud <= IoT.delay_budget):
