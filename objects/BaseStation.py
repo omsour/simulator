@@ -8,6 +8,8 @@ class BaseStation:
         self.power = power
         self.bandwidth = bandwidth
         self.frequency = frequency
+        self.weights = [1, 1]
+        self.ratioConstant = 1
         print("BS is generated")
 
     def allocateResources(self, edgeComputeResources, cloudComputeResources, IoTnodes, scheme="ONLY_EDGE"):
@@ -48,8 +50,10 @@ class BaseStation:
               for IoT in IoTnodes:
 
                 # Distribution of bandwidth
-                uplink_bandwidth = self.bandwidth / n_nodes
-
+                cost = self.weights[0] * IoT.data_generated + self.weights[1] * IoT.delay_budget
+                uplink_bandwidth = self.ratioConstant * cost / self.bandwidth
+                #uplink_bandwidth = self.bandwidth / n_nodes
+                
 
                 # Distribution of computation power
                 compute_allocated_edge = edgeComputeResources.CPU_cycles/n_nodes # JUST allocate resources equally among IoT devices
