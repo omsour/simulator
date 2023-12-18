@@ -1,5 +1,9 @@
 import random
 
+import util
+from objects import Params
+
+
 class BaseStation:
     def __init__(self, id, bandwidth, power, x, y, frequency):
         self.id = id
