@@ -16,6 +16,8 @@ class BaseStation:
         self.maxCost = maxCost
         self.fulfilmentrate = []
         self.overhead = []
+        self.possible_cloud = True
+        self.possible_edge = True
         print("BS is generated")
 
     def allocateResources(self, edgeComputeResources, cloudComputeResources, IoTnodes, scheme="ONLY_EDGE"):
@@ -23,7 +25,7 @@ class BaseStation:
         # To give you some idea, three very simple decision logic are implemented: only-edge, only-cloud, and random
         n_nodes = len(IoTnodes)
         decision = []
-        multiplication_rate = []
+        overhead_rate = []
         counter_fulfilled_budget = 0
 
         remainingEdgeCapacity = edgeComputeResources.CPU_cycles
@@ -39,7 +41,7 @@ class BaseStation:
                 if (total_budget_edge <= IoT.delay_budget):
                     counter_fulfilled_budget += 1
                 else:
-                    multiplication_rate.append(total_budget_edge/IoT.delay_budget)
+                    overhead_rate.append(total_budget_edge/IoT.delay_budget)
 
 
                 uplink_bandwidth = self.bandwidth / n_nodes  # equally allocate the uplink bandwidth among IoT devices
@@ -58,12 +60,12 @@ class BaseStation:
             for IoT in IoTnodes:
 
                 total_budget_cloud = Params.Cloud_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
-                                                                                          Params.Cloud_CPU_cycles)
+                                                                                            Params.Cloud_CPU_cycles)
 
                 if (total_budget_cloud <= IoT.delay_budget):
                     counter_fulfilled_budget += 1
                 else:
-                    multiplication_rate.append(total_budget_cloud / IoT.delay_budget)
+                    overhead_rate.append(total_budget_cloud / IoT.delay_budget)
 
                 uplink_bandwidth = self.bandwidth / n_nodes
                 run_on_edge = 0
@@ -79,36 +81,34 @@ class BaseStation:
         elif scheme == "CUSTOM":
             for IoT in IoTnodes:
 
-                # Prediction of Delay Budget fulfilment rate
+                # First step filter out unreasonable devices based on delay time
 
-                total_budget_cloud = Params.Cloud_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
-                                                                                            Params.Cloud_CPU_cycles)
+                total_cloud_time = IoT.data_generated/IoT.get_rate(self,self.bandwidth) + Params.Cloud_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
+                                                                                                                                                 Params.Cloud_CPU_cycles)
 
-                if (total_budget_cloud <= IoT.delay_budget):
-                    run_on_edge = 0
-                    run_on_cloud = 1  # IOT device is allocated to cloud to fulfil delay budget
-                    compute_allocated = cloudComputeResources.CPU_cycles / n_nodes
+                if (total_cloud_time > IoT.delay_budget):
 
-                    counter_fulfilled_budget += 1
+                    self.possible_cloud = False
+
+                total_edge_time = IoT.data_generated/IoT.get_rate(self,self.bandwidth) + Params.Edge_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
+                                                                                                                                           Params.Edge_CPU_cycles)
+
+                if(total_edge_time > IoT.delay_budget):
+
+                    self.possible_edge = False
+
+                    if(self.possible_cloud == False):
+                        overhead_rate.append(total_edge_time / IoT.delay_budget)
+                        print(
+                            "IOT device " + IoT.id + " is dropped as it cannot fulfill the delay budget with an overhead of " + total_edge_time / IoT.delay_budget)
+
+                        continue
 
 
-                else:
+                # Second step deciding on bandwidth allocation
 
-                    total_budget_edge = Params.Edge_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
-                                                                                              Params.Edge_CPU_cycles)
 
-                    if (total_budget_edge <= IoT.delay_budget):
-                        run_on_edge = 1  # IOT device is allocated to edge to fulfil delay budget
-                        run_on_cloud = 0
-                        compute_allocated = edgeComputeResources.CPU_cycles / n_nodes
-                        counter_fulfilled_budget += 1
 
-                    else:
-
-                        multiplication_rate.append(total_budget_edge / IoT.delay_budget)
-                        print("IOT device " + IoT.id + " is dropped as it cannot fulfill the delay budget with an overhead of " + total_budget_edge / IoT.delay_budget)
-                        self.maxCost -= IoT.get_cost(self.weights)
-                        continue  # IOT device gets dropped if it cannot fulfil the delay budget in any way
 
                 # Modifying the computation allocation to match the needed computation power
 
@@ -122,14 +122,17 @@ class BaseStation:
 
                 # uplink_bandwidth2 = self.bandwidth / n_nodes
 
-                # Executing the resource allocation process
 
+
+                # Executing the resource allocation process
 
                 resources_allocated = Allocation()
                 resources_allocated.set_values(run_on_edge, run_on_cloud, uplink_bandwidth, compute_allocated)
                 decision.append(resources_allocated)
 
+                # Resetting all used variables
 
+                self.possible_cloud = True
 
         else:
             for IoT in IoTnodes:
@@ -144,7 +147,7 @@ class BaseStation:
                     if (total_budget_cloud <= IoT.delay_budget):
                         counter_fulfilled_budget += 1
                     else:
-                        multiplication_rate.append(total_budget_cloud / IoT.delay_budget)
+                        overhead_rate.append(total_budget_cloud / IoT.delay_budget)
 
 
                     if compute_allocated > IoT.CPU_needed:  # if allocated resource is larger than needed, set allocation to what is needed
@@ -159,7 +162,7 @@ class BaseStation:
                     if (total_budget_edge <= IoT.delay_budget):
                         counter_fulfilled_budget += 1
                     else:
-                        multiplication_rate.append(total_budget_edge / IoT.delay_budget)
+                        overhead_rate.append(total_budget_edge / IoT.delay_budget)
 
                     if compute_allocated > IoT.CPU_needed:  # if allocated resource is larger than needed, set allocation to what is needed
                         compute_allocated = IoT.CPU_needed
@@ -169,29 +172,29 @@ class BaseStation:
                 resources_allocated = Allocation()
                 resources_allocated.set_values(run_on_edge, run_on_cloud, uplink_bandwidth, compute_allocated)
                 decision.append(resources_allocated)
-        self.overhead.append(util.average(multiplication_rate))
+        self.overhead.append(util.average(overhead_rate))
         self.fulfilmentrate.append(counter_fulfilled_budget/n_nodes)
         return decision
 
-    def check_if_feasible(self, allocation, edgeComputeCapacity, cloudComputeCapacity):
-        sum_bw = 0
-        sum_edge_compute = 0
-        sum_cloud_compute = 0
+def check_if_feasible(self, allocation, edgeComputeCapacity, cloudComputeCapacity):
+    sum_bw = 0
+    sum_edge_compute = 0
+    sum_cloud_compute = 0
 
-        for a in allocation:
-            sum_bw = sum_bw + a.uplink_bandwidth
-            sum_edge_compute = sum_edge_compute + a.run_on_edge * a.compute_allocated
-            sum_cloud_compute = sum_cloud_compute + (1 - a.run_on_edge) * a.compute_allocated
+    for a in allocation:
+        sum_bw = sum_bw + a.uplink_bandwidth
+        sum_edge_compute = sum_edge_compute + a.run_on_edge * a.compute_allocated
+        sum_cloud_compute = sum_cloud_compute + (1 - a.run_on_edge) * a.compute_allocated
 
-        utilization_uplink = 1.0 * sum_bw / self.bandwidth
-        utilization_edge = 1.0 * sum_edge_compute / edgeComputeCapacity
-        utilization_cloud = 1.0 * sum_cloud_compute / cloudComputeCapacity
+    utilization_uplink = 1.0 * sum_bw / self.bandwidth
+    utilization_edge = 1.0 * sum_edge_compute / edgeComputeCapacity
+    utilization_cloud = 1.0 * sum_cloud_compute / cloudComputeCapacity
 
-        if utilization_uplink <= 1.0:
-            if utilization_edge <= 1.0:
-                if utilization_cloud <= 1.0:
-                    return True, utilization_uplink, utilization_edge, utilization_cloud
-        return False, utilization_uplink, utilization_edge, utilization_cloud
+    if utilization_uplink <= 1.0:
+        if utilization_edge <= 1.0:
+            if utilization_cloud <= 1.0:
+                return True, utilization_uplink, utilization_edge, utilization_cloud
+    return False, utilization_uplink, utilization_edge, utilization_cloud
 
 
 class Allocation:
