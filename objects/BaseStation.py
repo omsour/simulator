@@ -13,7 +13,7 @@ class BaseStation:
         self.bandwidth = bandwidth
         self.frequency = frequency
         self.weights = weights
-        self.ratioConstant = bandwidth/maxCost
+        self.maxCost = maxCost
         self.fulfilmentrate = []
         self.overhead = []
         print("BS is generated")
@@ -83,11 +83,6 @@ class BaseStation:
 
                 total_budget_cloud = Params.Cloud_BS_delay + util.calculate_computationTime(IoT.CPU_needed,
                                                                                             Params.Cloud_CPU_cycles)
-                # Distribution of bandwidth
-                cost = self.weights[0] * IoT.data_generated + self.weights[1] * IoT.delay_budget
-                uplink_bandwidth = self.ratioConstant * cost
-                uplink_bandwidth2 = self.bandwidth / n_nodes
-
 
                 if (total_budget_cloud <= IoT.delay_budget):
                     run_on_edge = 0
@@ -112,6 +107,7 @@ class BaseStation:
 
                         multiplication_rate.append(total_budget_edge / IoT.delay_budget)
                         print("IOT device " + IoT.id + " is dropped as it cannot fulfill the delay budget with an overhead of " + total_budget_edge / IoT.delay_budget)
+                        self.maxCost -= IoT.get_cost(self.weights)
                         continue  # IOT device gets dropped if it cannot fulfil the delay budget in any way
 
                 # Modifying the computation allocation to match the needed computation power
@@ -120,7 +116,11 @@ class BaseStation:
                     compute_allocated = IoT.CPU_needed
 
                 # Distribution of bandwidth
-                uplink_bandwidth = self.bandwidth / n_nodes
+                ratioConstant = self.bandwidth/self.maxCost
+                cost = IoT.get_cost(self.weights)
+                uplink_bandwidth = ratioConstant * cost
+
+                # uplink_bandwidth2 = self.bandwidth / n_nodes
 
                 # Executing the resource allocation process
 
